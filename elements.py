@@ -1,11 +1,7 @@
-import math
-from random import randint
-
-from gamelib import Sprite, GameApp, Text
-
+from gamelib import Sprite
+from utils import direction_to_dxdy
 from consts import *
 
-from utils import direction_to_dxdy, distance
 
 class FixedDirectionSprite(Sprite):
     def __init__(self, app, image_filename, x, y, vx, vy):
@@ -21,6 +17,9 @@ class FixedDirectionSprite(Sprite):
             self.to_be_deleted = True
 
 
+
+
+
 class Bullet(FixedDirectionSprite):
     def __init__(self, app, x, y, vx, vy):
         super().__init__(app, 'images/bullet1.png', x, y, vx, vy)
@@ -33,6 +32,9 @@ class Enemy(FixedDirectionSprite):
     def __init__(self, app, x, y, vx, vy):
         super().__init__(app, 'images/enemy1.png', x, y, vx, vy)
 
+class Enemy2(Sprite):
+    def __init__(self, app, x, y):
+        super().__init__(app, 'images/ghost.png', x, y)
 
 class Ship(Sprite):
     def __init__(self, app, x, y):
@@ -45,7 +47,7 @@ class Ship(Sprite):
         self.is_turning_right = False
 
     def update(self):
-        dx,dy = direction_to_dxdy(self.direction)
+        dx, dy = direction_to_dxdy(self.direction)
 
         self.x += dx * SHIP_SPEED
         self.y += dy * SHIP_SPEED
@@ -82,9 +84,8 @@ class Ship(Sprite):
         if self.app.bullet_count() >= MAX_NUM_BULLETS:
             return
 
-        dx,dy = direction_to_dxdy(self.direction)
+        dx, dy = direction_to_dxdy(self.direction)
 
         bullet = Bullet(self.app, self.x, self.y, dx * BULLET_BASE_SPEED, dy * BULLET_BASE_SPEED)
 
         self.app.add_bullet(bullet)
-
