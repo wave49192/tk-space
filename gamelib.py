@@ -126,7 +126,6 @@ class GameApp(ttk.Frame):
         self.create_canvas()
 
         self.elements = []
-        self.init_game()
 
         self.is_stopped = False
 
@@ -135,6 +134,7 @@ class GameApp(ttk.Frame):
         self.key_pressed_handler = KeyboardHandler()
         self.key_released_handler = KeyboardHandler()
         self.init_game()
+
 
     def create_canvas(self):
         self.canvas = tk.Canvas(self, borderwidth=0,

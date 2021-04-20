@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from random import randint, random
 
 from consts import *
-from elements import Ship, Enemy, PowerUp,Enemy2
+from elements import Ship, Enemy,Enemy2
 from gamelib import GameApp, Text, KeyboardHandler
 from utils import random_edge_position, normalize_vector, direction_to_dxdy, vector_len
 
@@ -80,13 +80,20 @@ class SpaceGame(GameApp):
         if self.bomb_power == BOMB_FULL_POWER:
             self.bomb_power = 0
 
-            self.create_bomb()
+            self.bomb_canvas_id = self.canvas.create_oval(
+                self.ship.x - BOMB_RADIUS,
+                self.ship.y - BOMB_RADIUS,
+                self.ship.x + BOMB_RADIUS,
+                self.ship.y + BOMB_RADIUS
+            )
 
-            self.after_function(200, lambda: self.canvas.delete(self.bomb_canvas_id))
+            self.after(200, lambda: self.canvas.delete(self.bomb_canvas_id))
 
-            self.enemy_distroyed_by_bomb()
+            for e in self.enemies:
+                if self.ship.distance_to(e) <= BOMB_RADIUS:
+                    e.to_be_deleted = True
 
-            self.update_bomb_power_text()
+
 
     def create_bomb(self):
         self.bomb_canvas_id = self.canvas.create_oval(
